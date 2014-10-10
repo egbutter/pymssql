@@ -1787,7 +1787,7 @@ cdef _quote_data(data, charset='utf8'):
 
     raise ValueError('expected a simple type, a tuple or a dictionary.')
 
-_re_pos_param = re.compile(r'(%(s|d))')
+_re_pos_param = re.compile(r'((\?)|%(s|d))')
 _re_name_param = re.compile(r'(%\(([^\)]+)\)s)')
 cdef _substitute_params(toformat, params, charset):
     if params is None:
@@ -1854,7 +1854,7 @@ cdef _substitute_params(toformat, params, charset):
             except IndexError:
                 raise ValueError('more placeholders in sql than params available')
             param_val_len = len(param_val)
-            placeholder_len = 2
+            placeholder_len = len(match.group(1))
             offset_adjust = param_val_len - placeholder_len
 
             # do the string substitution
